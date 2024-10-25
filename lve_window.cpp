@@ -1,5 +1,8 @@
 #include "lve_window.hpp"
 
+// std
+#include <stdexcept>
+
 namespace lve {
 
 LveWindow::LveWindow(int w, int h, std::string name)
@@ -25,4 +28,13 @@ void LveWindow::initWindow() {
   window =
       glfwCreateWindow(width, height, windowName.c_str(), nullptr, nullptr);
 }
+
+void LveWindow::createWindowSurface(VkInstance instance,
+                                    VkSurfaceKHR *surface) {
+  if (glfwCreateWindowSurface(instance, window, nullptr, surface) !=
+      VK_SUCCESS) {
+    throw std::runtime_error("failed to create window surface!");
+  }
+}
+
 } // namespace lve

@@ -15,7 +15,10 @@ public:
   LveWindow(const LveWindow &) = delete;
   LveWindow &operator=(const LveWindow &) = delete;
 
+  // glfwWindowShouldClose 함수를 호출하여 창이 닫혔는지 확인
   bool shouldClose() { return glfwWindowShouldClose(window); }
+
+  void createWindowSurface(VkInstance instance, VkSurfaceKHR *surface);
 
 private:
   void initWindow();
