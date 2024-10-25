@@ -1,4 +1,5 @@
 #include "lve_pipeline.hpp"
+#include "lve_model.hpp"
 
 // std
 #include <cassert>
@@ -83,14 +84,27 @@ void LvePipeline::createGraphicsPipeline(const std::string &vertFilepath,
   shaderStages[1].pNext = nullptr;
   shaderStages[1].pSpecializationInfo = nullptr;
 
+  // vertex 설명서
+  auto bindingDescriptions = LveModel::Vertex::getBindingDescriptions();
+  auto attributeDescriptions = LveModel::Vertex::getAttributeDescriptions();
+
   // vertex 입력 상태 설정 (vertex 속성 사용 안 함)
   VkPipelineVertexInputStateCreateInfo vertexInputInfo{};
   vertexInputInfo.sType =
       VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
-  vertexInputInfo.vertexAttributeDescriptionCount = 0;
-  vertexInputInfo.vertexBindingDescriptionCount = 0;
-  vertexInputInfo.pVertexAttributeDescriptions = nullptr;
-  vertexInputInfo.pVertexBindingDescriptions = nullptr;
+  vertexInputInfo.vertexAttributeDescriptionCount =
+      static_cast<uint32_t>(attributeDescriptions.size());
+  vertexInputInfo.vertexBindingDescriptionCount =
+      static_cast<uint32_t>(bindingDescriptions.size());
+  vertexInputInfo.pVertexAttributeDescriptions = attributeDescriptions.data();
+  vertexInputInfo.pVertexBindingDescriptions = bindingDescriptions.data();
+
+  VkPipelineViewportStateCreateInfo viewportInfo{};
+  viewportInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
+  viewportInfo.viewportCount = 1;
+  viewportInfo.pViewports = &configInfo.viewport;
+  viewportInfo.scissorCount = 1;
+  viewportInfo.pScissors = &configInfo.scissor;
 
   // 그래픽스 파이프라인 생성 정보 설정
   VkGraphicsPipelineCreateInfo pipelineInfo{};
@@ -99,7 +113,7 @@ void LvePipeline::createGraphicsPipeline(const std::string &vertFilepath,
   pipelineInfo.pStages = shaderStages;
   pipelineInfo.pVertexInputState = &vertexInputInfo;
   pipelineInfo.pInputAssemblyState = &configInfo.inputAssemblyInfo;
-  pipelineInfo.pViewportState = &configInfo.viewportInfo;
+  pipelineInfo.pViewportState = &viewportInfo;
   pipelineInfo.pRasterizationState = &configInfo.rasterizationInfo;
   pipelineInfo.pMultisampleState = &configInfo.multisampleInfo;
   pipelineInfo.pColorBlendState = &configInfo.colorBlendInfo;
@@ -132,6 +146,11 @@ void LvePipeline::createShaderModule(const std::vector<char> &code,
                            shaderModule) != VK_SUCCESS) {
     throw std::runtime_error("failed to create shader module");
   }
+}
+
+void LvePipeline::bind(VkCommandBuffer commandBuffer) {
+  vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS,
+                    graphicsPipeline);
 }
 
 PipelineConfigInfo LvePipeline::defaultPipelineConfigInfo(uint32_t width,
