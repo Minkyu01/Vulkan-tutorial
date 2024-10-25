@@ -15,6 +15,7 @@ class LveModel {
 public:
   struct Vertex {
     glm::vec2 position;
+    glm::vec3 color;
 
     // binding description
     static std::vector<VkVertexInputBindingDescription>
@@ -39,4 +40,5 @@ private:
   VkDeviceMemory vertexBufferMemory;
   uint32_t vertexCount;
 };
+
 } // namespace lve

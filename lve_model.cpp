@@ -58,12 +58,21 @@ LveModel::Vertex::getBindingDescriptions() {
 
 std::vector<VkVertexInputAttributeDescription>
 LveModel::Vertex::getAttributeDescriptions() {
-  std::vector<VkVertexInputAttributeDescription> attributeDescriptions(1);
+  // 2개의 attribute를 가진 정점 구조체
+  std::vector<VkVertexInputAttributeDescription> attributeDescriptions(2);
 
   attributeDescriptions[0].binding = 0;
   attributeDescriptions[0].location = 0;
   attributeDescriptions[0].format = VK_FORMAT_R32G32_SFLOAT;
-  attributeDescriptions[0].offset = 0;
+  attributeDescriptions[0].offset = offsetof(Vertex, position);
+
+  // interleaved 하게 binding하기 때문에 0
+  attributeDescriptions[1].binding = 0;
+  // vertex shader에서 사용하는 location과 같아야 함 : 1
+  attributeDescriptions[1].location = 1;
+  attributeDescriptions[1].format = VK_FORMAT_R32G32B32_SFLOAT;
+  // 색상 데이터 offset 자동 계산
+  attributeDescriptions[1].offset = offsetof(Vertex, color);
   return attributeDescriptions;
 }
 
