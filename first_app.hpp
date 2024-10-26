@@ -32,20 +32,21 @@ private:
   void createPipeline();
   void createCommandBuffers();
   void drawFrame();
-  void sierpinski(std::vector<LveModel::Vertex> &vertices, int depth,
-                  glm::vec2 left, glm::vec2 right, glm::vec2 top);
+  void freeCommandBuffers();
+  void recreateSwapChain();
+  void recordCommandBuffer(int imageIndex);
+  //   void sierpinski(std::vector<LveModel::Vertex> &vertices, int depth,
+  //                   glm::vec2 left, glm::vec2 right, glm::vec2 top);
 
   // window객체 생성
   LveWindow lveWindow{WIDTH, HEIGHT, "Hello Vulkan!"};
 
   // vertex, fragment shader 파일 경로를 받아서 pipeline 생성
   LveDevice lveDevice{lveWindow};
-  //   LvePipeline lvePipeline{
-  //       lveDevice, "shaders/simple_shader.vert.spv",
-  //       "shaders/simple_shader.frag.spv",
-  //       LvePipeline::defaultPipelineConfigInfo(WIDTH, HEIGHT)};
 
-  LveSwapChain lveSwapChain{lveDevice, lveWindow.getExtent()};
+  //   LveSwapChain lveSwapChain{lveDevice, lveWindow.getExtent()};
+  // 성능을 위해 unique_ptr로 변경
+  std::unique_ptr<LveSwapChain> lveSwapChain;
   std::unique_ptr<LvePipeline> lvePipeline;
   VkPipelineLayout pipelineLayout;
   std::vector<VkCommandBuffer> commandBuffers;
