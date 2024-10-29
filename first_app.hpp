@@ -1,7 +1,7 @@
 #pragma once
 
 #include "lve_device.hpp"
-#include "lve_model.hpp"
+#include "lve_game_object.hpp"
 #include "lve_pipeline.hpp"
 #include "lve_swap_chain.hpp"
 #include "lve_window.hpp"
@@ -27,7 +27,7 @@ public:
   void run();
 
 private:
-  void loadModels();
+  void loadGameObjects();
   void createPipelineLayout();
   void createPipeline();
   void createCommandBuffers();
@@ -35,8 +35,7 @@ private:
   void freeCommandBuffers();
   void recreateSwapChain();
   void recordCommandBuffer(int imageIndex);
-  //   void sierpinski(std::vector<LveModel::Vertex> &vertices, int depth,
-  //                   glm::vec2 left, glm::vec2 right, glm::vec2 top);
+  void renderGameObjects(VkCommandBuffer commandBuffer);
 
   // window객체 생성
   LveWindow lveWindow{WIDTH, HEIGHT, "Hello Vulkan!"};
@@ -50,6 +49,6 @@ private:
   std::unique_ptr<LvePipeline> lvePipeline;
   VkPipelineLayout pipelineLayout;
   std::vector<VkCommandBuffer> commandBuffers;
-  std::unique_ptr<LveModel> lveModel;
+  std::vector<LveGameObject> gameObjects;
 };
 } // namespace lve
