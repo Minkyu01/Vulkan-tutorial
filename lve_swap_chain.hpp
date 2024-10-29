@@ -45,6 +45,13 @@ public:
   VkResult submitCommandBuffers(const VkCommandBuffer *buffers,
                                 uint32_t *imageIndex);
 
+  //   LveSwapChain 객체 간에 스왑체인의 이미지 포맷과 깊이 포맷이 일치하는지
+  //   비교하는 역할 -> 변경되지 않으면 스왑체인을 다시 생성할 필요가 없기 때문
+  bool compareSwapFormats(const LveSwapChain &swapChain) const {
+    return swapChain.swapChainDepthFormat == swapChainDepthFormat &&
+           swapChain.swapChainImageFormat == swapChainImageFormat;
+  }
+
 private:
   void init();
   void createSwapChain();
@@ -62,6 +69,7 @@ private:
   VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR &capabilities);
 
   VkFormat swapChainImageFormat;
+  VkFormat swapChainDepthFormat;
   VkExtent2D swapChainExtent;
 
   std::vector<VkFramebuffer> swapChainFramebuffers;

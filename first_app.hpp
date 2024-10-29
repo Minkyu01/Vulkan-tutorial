@@ -2,8 +2,7 @@
 
 #include "lve_device.hpp"
 #include "lve_game_object.hpp"
-#include "lve_pipeline.hpp"
-#include "lve_swap_chain.hpp"
+#include "lve_renderer.hpp"
 #include "lve_window.hpp"
 
 // std
@@ -28,14 +27,6 @@ public:
 
 private:
   void loadGameObjects();
-  void createPipelineLayout();
-  void createPipeline();
-  void createCommandBuffers();
-  void drawFrame();
-  void freeCommandBuffers();
-  void recreateSwapChain();
-  void recordCommandBuffer(int imageIndex);
-  void renderGameObjects(VkCommandBuffer commandBuffer);
 
   // window객체 생성
   LveWindow lveWindow{WIDTH, HEIGHT, "Hello Vulkan!"};
@@ -43,12 +34,9 @@ private:
   // vertex, fragment shader 파일 경로를 받아서 pipeline 생성
   LveDevice lveDevice{lveWindow};
 
-  //   LveSwapChain lveSwapChain{lveDevice, lveWindow.getExtent()};
-  // 성능을 위해 unique_ptr로 변경
-  std::unique_ptr<LveSwapChain> lveSwapChain;
-  std::unique_ptr<LvePipeline> lvePipeline;
-  VkPipelineLayout pipelineLayout;
-  std::vector<VkCommandBuffer> commandBuffers;
+  // lve renderer 설정
+  LveRenderer lveRenderer{lveWindow, lveDevice};
+
   std::vector<LveGameObject> gameObjects;
 };
 } // namespace lve
