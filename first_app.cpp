@@ -24,6 +24,10 @@ void FirstApp::run() {
                                         lveRenderer.getSwapChainRenderPass()};
   LveCamera camera{};
 
+  // camera.setViewDirection(glm::vec3(0.f), glm::vec3(0.5f, 0.f, 1.f));
+  // 2.5f는 큐브의 중심
+  camera.setViewTarget(glm::vec3(-1.f, -2.f, -2.f), glm::vec3(0.f, 0.f, 2.5f));
+
   while (!lveWindow.shouldClose()) {
     glfwPollEvents();
 
