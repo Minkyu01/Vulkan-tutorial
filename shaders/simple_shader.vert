@@ -2,7 +2,7 @@
 #version 450
 
 // vertex shader
-layout(location = 0) in vec2 position;
+layout(location = 0) in vec3 position;
 layout(location = 1) in vec3 color;
 
 // fragment shader로 넘겨줄 변수 -> 각 shader마다 location은 독립적
@@ -10,13 +10,13 @@ layout(location = 1) in vec3 color;
 layout(location = 0) out vec3 fragColor;
 
 layout(push_constant) uniform Push {
-  mat2 transform;
-  vec2 offset;
+  // 동차 좌표계
+  mat4 transform;
   vec3 color;
 }
 push;
 
 void main() {
-  //  행렬 곱셈이므로 교한법칙이 성립하지 않음
-  gl_Position = vec4(push.transform * position + push.offset, 0.0, 1.0);
+  gl_Position = push.transform * vec4(position, 1.0);
+  fragColor = color;
 }

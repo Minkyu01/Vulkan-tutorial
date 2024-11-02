@@ -33,6 +33,8 @@ public:
     return lveSwapChain->getRenderPass();
   }
 
+  float getAspectRatio() const { return lveSwapChain->extentAspectRatio(); }
+
   //  프레임 진행중인지 확인하는 함수
   bool isFrameInProgress() { return isFrameStarted; }
 
