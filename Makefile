@@ -24,7 +24,16 @@ $(TARGET): *.cpp *.hpp
 %.spv: %
 	${GLSLC} $< -o $@
 
-.PHONY: test clean
+docs : 
+	doxygen Doxyfile
+
+# macOS
+web : docs
+	open docs/html/index.html     
+   
+# Windows -> 나중에 python 파일이나 서브모듈로 분류시키기
+# web : 
+# 	start docs\html\index.html  
 
 test: a.out
 	./a.out
@@ -32,3 +41,5 @@ test: a.out
 clean:
 	rm -f a.out
 	rm -f *.spv
+
+.PHONY: test clean docs web

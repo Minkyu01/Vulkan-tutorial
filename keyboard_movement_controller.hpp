@@ -4,6 +4,7 @@
 #include "lve_window.hpp"
 
 namespace lve {
+
 class KeyboardMovementController {
 public:
   struct KeyMappings {
@@ -19,9 +20,17 @@ public:
     int lookDown = GLFW_KEY_DOWN;
   };
 
+  /**
+   * @brief 게임 오브젝트를 XZ 평면상에서 이동시킵니다.
+   *
+   * @param window
+   * @param dt
+   * @param gameObject
+   */
   void moveInPlaneXZ(GLFWwindow *window, float dt, LveGameObject &gameObject);
 
   KeyMappings keys{};
+
   float moveSpeed{3.f};
   //   회전 속도
   float lookSpeed{1.5f};

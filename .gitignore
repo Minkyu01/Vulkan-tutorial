@@ -3,4 +3,7 @@
 a.out
 libs
 models
+docs
+
+.gitmodules
 

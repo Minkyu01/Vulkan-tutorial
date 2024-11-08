@@ -109,11 +109,12 @@ void LveRenderer::endFrame() {
 
   isFrameStarted = false;
 
+  //  여러 프레임을 동시에 처리하는 다중 버퍼링이 가능해져 CPU와 GPU가 병렬로
+  //  작업을 수행할 수 있게 됨
   currentFrameIndex =
       (currentFrameIndex + 1) % LveSwapChain::MAX_FRAMES_IN_FLIGHT;
 }
 
-//  render pass에 swap chain 그리기 시작 및 끝내는 함수
 void LveRenderer::beginSwapChainRenderPass(VkCommandBuffer commandBuffer) {
   assert(isFrameStarted &&
          "Can't call beginSwapChainRenderPass if frame is not in progress");

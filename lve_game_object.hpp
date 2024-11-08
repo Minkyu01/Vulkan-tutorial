@@ -47,6 +47,9 @@ struct TransformComponent {
   }
 };
 
+/**
+ * @brief game objects 저장하는 벡터
+ */
 class LveGameObject {
 public:
   using id_t = unsigned int;

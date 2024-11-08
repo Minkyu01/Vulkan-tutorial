@@ -23,18 +23,21 @@ public:
   FirstApp(const FirstApp &) = delete;
   FirstApp &operator=(const FirstApp &) = delete;
 
+  /**
+   * @brief vulkan application 실행
+   */
   void run();
 
 private:
+  /**
+   * @brief game object 로드
+   */
   void loadGameObjects();
 
-  // window객체 생성
   LveWindow lveWindow{WIDTH, HEIGHT, "Hello Vulkan!"};
 
-  // vertex, fragment shader 파일 경로를 받아서 pipeline 생성
   LveDevice lveDevice{lveWindow};
 
-  // lve renderer 설정
   LveRenderer lveRenderer{lveWindow, lveDevice};
 
   std::vector<LveGameObject> gameObjects;

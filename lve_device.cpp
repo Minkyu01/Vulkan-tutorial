@@ -43,23 +43,16 @@ void DestroyDebugUtilsMessengerEXT(VkInstance instance,
 }
 
 LveDevice::LveDevice(LveWindow &window) : window{window} {
-  // 유효성 검사 레이어 설정, 애플리케이션과 vulkan 연결 instance 생성
   createInstance();
 
-  // Debug 메시지 설정
   setupDebugMessenger();
 
-  // glfw에서 vulkan을 사용할 수 있도록 surface(window) 생성
   createSurface();
 
-  // 애플리케이션이 사용하는 물리적 장치 선택
-  // ex: 3060ti, 3080, 3090, 등등, 복수 선택도 가능은 함
   pickPhysicalDevice();
 
-  // 우리가 사용하려는 물리적 장치의 기능을 설명
   createLogicalDevice();
 
-  // 나중에 사용하는 명령어 pool을 만들어 놓기
   createCommandPool();
 }
 
@@ -76,11 +69,6 @@ LveDevice::~LveDevice() {
 }
 
 void LveDevice::createInstance() {
-  // vulkan에서 유효성 검사 layer으로 확인
-  if (enableValidationLayers && !checkValidationLayerSupport()) {
-    throw std::runtime_error("validation layers requested, but not available!");
-  }
-
   // VkApplicationInfo로 애플리케이션 정보 설정
   VkApplicationInfo appInfo = {};
   appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
@@ -89,6 +77,11 @@ void LveDevice::createInstance() {
   appInfo.pEngineName = "No Engine";
   appInfo.engineVersion = VK_MAKE_VERSION(1, 0, 0);
   appInfo.apiVersion = VK_API_VERSION_1_0;
+
+  // vulkan에서 유효성 검사 layer으로 확인
+  if (enableValidationLayers && !checkValidationLayerSupport()) {
+    throw std::runtime_error("validation layers requested, but not available!");
+  }
 
   // Vulkan 인스턴스를 생성하는 데 필요한 정보
   VkInstanceCreateInfo createInfo = {};
@@ -134,6 +127,7 @@ void LveDevice::pickPhysicalDevice() {
   if (deviceCount == 0) {
     throw std::runtime_error("failed to find GPUs with Vulkan support!");
   }
+
   std::cout << "Device count: " << deviceCount << std::endl;
   std::vector<VkPhysicalDevice> devices(deviceCount);
   vkEnumeratePhysicalDevices(instance, &deviceCount, devices.data());
@@ -230,7 +224,6 @@ void LveDevice::createSurface() {
   window.createWindowSurface(instance, &surface_);
 }
 
-// 적합한 device인지 판단하는 함수
 bool LveDevice::isDeviceSuitable(VkPhysicalDevice device) {
   QueueFamilyIndices indices = findQueueFamilies(device);
 
@@ -318,8 +311,6 @@ std::vector<const char *> LveDevice::getRequiredExtensions() {
   return extensions;
 }
 
-// 필요한 인스턴스 확장 기능을 지원하는지 확인하는 함수
-// 주로 glfw에서 필요한 확장 기능을 확인
 void LveDevice::hasGflwRequiredInstanceExtensions() {
   uint32_t extensionCount = 0;
   vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, nullptr);

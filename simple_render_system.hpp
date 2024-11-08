@@ -14,6 +14,10 @@ namespace lve {
 class SimpleRenderSystem {
 
 public:
+  /**
+   * @brief pipeline layout과 pipeline 생성
+   *
+   */
   SimpleRenderSystem(LveDevice &device, VkRenderPass renderPass);
   ~SimpleRenderSystem();
 
@@ -25,9 +29,18 @@ public:
                          const LveCamera &camera);
 
 private:
+  /**
+   * @brief 그래픽스 파이프라인 레이아웃을 생성
+   * 푸시 상수를 설정, shader의 상수 데이터 설정
+   *
+   */
   void createPipelineLayout();
-  // 전달된 render passs는 수명주기가 렌더 패스에 연결되어 있지 않기 때문에 렌더
-  // 패스 저장 안함
+
+  /**
+   * @brief 그래픽스 파이프라인 레이아웃을 이용해 그래픽 파이프라인 생성
+   * shader 파일 정보로 파이프라인 객체 생성
+   * @param renderPass
+   */
   void createPipeline(VkRenderPass renderPass);
 
   // vertex, fragment shader 파일 경로를 받아서 pipeline 생성
